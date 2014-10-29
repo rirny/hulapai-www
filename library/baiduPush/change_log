@@ -1,0 +1,6 @@
+version - 2.0.0
+1. 统一推送消息接口为pushMessag
+2. 调整group相关功能，修改为：setTag， fetchTag, deleteTag, queryUserTag
+
+version - 1.0.0
+1. 调整对外开放版本 first tag

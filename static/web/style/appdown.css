@@ -1,0 +1,123 @@
+@charset "utf-8";
+body {
+	margin:0;
+	min-width:200px;
+	font-size:48px;
+}
+.top{
+	width: 100%;
+	height: auto;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #dedede;
+}
+.logo {
+	color:#dd480e;float:left;margin:0;line-height:2em;padding-left:0.75em;font-size:1em;
+}
+.con {
+	color: #999;margin:0px;padding-left:1em;padding-top:0.5em;float:left;line-height:2em;font-size:0.75em;
+}
+.i_download {
+	width: 100%;
+	height: auto;
+	background-color: #ebebeb;
+	background-repeat: repeat-x;
+	background-image: url(../image/IOSdownbg_02.gif);
+	background-position: center top;
+	padding-top:4.5em;
+}
+.i_dul1 {
+	list-style-type: none;
+	margin:1em 20%;
+	width: 50%;
+	text-align: center;
+}
+.i_dul1 li {
+	margin-left:-40px;
+	color:#666;
+	line-height:1.5em;
+}
+.i_dul2 {
+	list-style-type: none;
+	margin:0 20%;
+	width: 50%;
+	text-align: center;
+}
+.i_dul2 li {
+	margin-left:-40px;
+	color:#666;
+	line-height:1.5em;
+}
+.i_dul2 li span {
+	color:#dd480e;font-size:1.5em;
+	padding-left:2px;
+	padding-right:2px;
+}
+.i_downapp {
+	width: 120px;
+	height: 40px;
+	background-color: #303f4f;
+	color: #fff;
+	border-radius: 5px;
+	border: 0;
+	font-size: 0.35em;
+	font-family: "Microsoft YaHei";
+	font-weight: bold;
+	cursor:pointer;
+	margin:3px 0;
+}
+.i_downdroid {
+	width: 120px;
+	height: 40px;
+	background-color:#303f4f;
+	color:#fff;
+	border-radius:5px;
+	border:0;
+	font-size: 0.35em;
+	font-family: "Microsoft YaHei";
+	font-weight: bold;
+	cursor:pointer;
+	margin:3px 0;
+}
+.iphone {
+	max-width:460px;
+	min-width:100px;
+	border: none; 
+	width: 100%; 
+	vertical-align: middle; 
+	display: inline-block;
+}
+.i_action {
+	background-color:#323232;
+	text-align: center;
+	padding-top:40px;
+	padding-bottom:40px;
+}
+.i_acttitle {
+	color:#fff;
+	font-size:2em;
+	line-height:3em;
+	margin:0;
+	font-family: "Microsoft YaHei";
+}
+.i_act1 img {
+	max-width:200px;
+	min-width:20px;
+	border: none; 
+	width: 50%; 
+	vertical-align: middle; 
+	display: inline-block;
+}
+.i_actplaza {
+	color:#dd480e;
+	font-family: "Microsoft YaHei";
+	font-size:2em;
+	line-height:3em;
+	margin:0;
+}
+.i_actplacon {
+	margin:0;
+	color:#fff;
+	font-size:0.875em;
+	line-height:1.75em;
+}

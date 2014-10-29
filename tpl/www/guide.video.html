@@ -1,0 +1,112 @@
+<!--{include file='www/header.html' action='guide'}-->
+<link href="<!--{$static}-->/web/style/guide.css" rel="stylesheet" type="text/css" />
+<div class="bcontent">
+    <div class="content">
+    	<div class="cleft">
+        	<h1 class="help">帮助视频</h1>
+            <div id="myplayer">
+				<script type="text/javascript" src="<!--{$static}-->/js/jplayer/swfobject.js"></script>
+				<div id="CuPlayer"></div>			
+			</div>
+			<ul class="playList">
+				<!--{foreach from=$source key=key item=item}-->
+				<li><!--{$key+1}-->、<a href="#" onclick="changeStream(<!--{$key}-->);"><!--{$item.name}--></a></li>
+				<!--{/foreach}-->
+			</ul>
+        </div>
+        
+        <div class="cright">			
+            <div class="guidelist">
+            	<h2>新手指南</h2>
+            	<ul class="guideul">
+					<!--{foreach from=$result key=key item=item}-->
+                	<li><a href="#<!--{$item.id}-->"><!--{$item.title}--></a></li>
+					<!--{/foreach}-->                	
+                </ul>
+            </div>
+            <div class="guidevideo">
+				<h2><a href="/guide_video">帮助视频</a></h2>
+			</div>
+        </div>
+		<div style="clear:both"></div>
+    </div>
+</div>
+<script type="text/javascript" src="<!--{$static}-->/js/jplayer/swfobject.js"></script>
+<script type="text/javascript">
+<!--
+var staticRoot = '<!--{$static}-->';
+var CuPlayerList = <!--{$sourceObj|default:'{}'}-->;
+var num = CuPlayerList.length;
+var video_index = 0;
+function getNext(pars)
+{	
+  if(video_index < num-1)
+	{
+		video_index++;
+		so.addVariable("CuPlayerFile", CuPlayerList[video_index]);
+		so.write("CuPlayer");	
+	}
+	else
+	{
+		video_index = 0;
+		so.addVariable("CuPlayerFile", CuPlayerList[video_index].source);
+		so.write("CuPlayer");
+	}
+}
+
+function changeStream(index){
+
+	$(".playList li a").css('color', '#666');
+	$(".playList li a").eq(index).css('color','#ff0000');
+
+	so.addVariable("CuPlayerFile", CuPlayerList[index].source);
+	so.addVariable("CuPlayerAutoPlay","true");
+	so.write("CuPlayer");	
+}
+
+$(".playList li a").css('color', '#666');
+$(".playList li a").eq(video_index).css('color','#ff0000');
+
+
+	CuPlayerFile = CuPlayerList[video_index];
+	var so = new SWFObject("<!--{$static}-->/js/jplayer/CuPlayerMiniV3_Black_S.swf","CuPlayer","600","400","9","#000000");
+	so.addParam("allowfullscreen","true");
+	so.addParam("allowscriptaccess","always");
+	so.addParam("wmode","opaque");
+	so.addParam("quality","high");
+	so.addParam("salign","lt");
+	so.addVariable("CuPlayerFile",CuPlayerFile.source);
+	so.addVariable("CuPlayerImage","<!--{$static}-->/web/image/screen.png");
+	//so.addVariable("CuPlayerLogo","<!--{$static}-->/web/image/screen.png");
+	so.addVariable("CuPlayerShowImage","true");
+	so.addVariable("CuPlayerWidth","600");
+	so.addVariable("CuPlayerHeight","400");
+	so.addVariable("CuPlayerAutoPlay","false");
+	so.addVariable("CuPlayerAutoRepeat","false");
+	so.addVariable("CuPlayerShowControl","true");
+	so.addVariable("CuPlayerAutoHideControl","false");
+	so.addVariable("CuPlayerAutoHideTime","6");
+	so.addVariable("CuPlayerVolume","80");
+	so.addVariable("CuPlayerGetNext","true");
+	so.write("CuPlayer");
+
+function windowH(){
+	if($(window).height()< 720){
+		$('.cleft').css('height', '590px');
+		$('.cright').css('height', '590px');
+		$('body').attr('scroll', '');
+		$('body').css('overflow','');
+	}else{
+		var clientHeight = document.documentElement.clientHeight;
+		if($.browser.mozilla)
+		{
+			clientHeight = window.innerHeight;
+		}
+		var heights = clientHeight - 240;
+		$('.cleft').css('height', heights + 'px');
+		$('.cright').css('height', heights + 'px');
+	}
+}
+windowH();
+</script>
+<!--{include file='www/footer.html'}-->

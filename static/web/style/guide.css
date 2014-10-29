@@ -1,0 +1,244 @@
+@charset "utf-8";
+body {
+	margin:0px;
+}
+.bheader {
+	background-color: #fff;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #dadada;
+}
+.header {
+	height: 59px;
+	width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.logo {
+	height:59px;
+	width:100px;
+	margin-left:20px;
+	margin-right:10px;
+	float:left;
+}
+.intr {
+	font-family: "Microsoft YaHei";
+	font-size: 18px;
+	line-height: 59px;
+	color: #cccccc;
+	text-align: center;
+	vertical-align: middle;
+}
+.menu {
+	list-style-type: none;
+	float:right;
+	margin-right:20px;
+	margin-top: 0px;
+}
+.menu li {
+	float: left;
+	position:relative;
+	z-index:1;
+}
+.selected {
+	background-image: url(../image/sj_03.gif);	
+	width:35px;
+	height:10px;
+	position:absolute;
+	z-index:10;
+	left:16px;
+	bottom:-1px;
+	/* position:absolute;
+	 z-index:10;
+	 left:30px;
+	 bottom:-1px;
+     width: 0;
+     height: 0;
+     border-left: 8px solid transparent;
+     border-right: 8px solid transparent;
+     border-bottom: 12px solid #ebebeb;*/
+}
+
+
+.menu li a {
+	font-size: 12px;
+	font-family: "SimSun";
+	height:59px;
+	line-height:59px;
+	color: #999999;
+	padding-right:10px;
+	padding-left:10px;
+	text-decoration: none;
+}
+.menudot {
+	border-right-width: 1px;
+	border-right-style: dotted;
+	border-right-color: #999999;
+	width: 0;
+	height: 0;
+
+}
+
+.hright {
+	float: right;
+	margin-right: 20px;
+	margin-top:12px;
+	border-radius: 5px;
+	width: 135px;
+	height: 35px;
+	background-color: #f8f8f8;
+	border: 1px solid #e3e3e3;
+}
+.hright span {
+	font-size: 15px;
+	font-family: "SimSun";
+	line-height: 35px;
+	padding-left: 15px;
+	color: #dd480e;
+	font-weight: bold;
+}
+.hright img {
+	height: 35px;
+	width: 30px;
+	float: right;
+	margin-right: 2px;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #e3e3e3;
+}
+
+.footer {
+	height: 85px;
+	width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-top:10px;
+	background-color:#fff;
+}
+.fup {
+	width:1000;
+	text-align: center;
+}
+.fdown {
+	text-align: center;
+}
+.bcontent {
+	background-color:#ebebeb;
+	width:100%;
+}
+
+.content {
+	min-height:1000px; 
+	width:1000px;
+	margin-left:auto;
+	margin-right:auto;
+	padding-bottom:20px;
+	background-color:#ebebeb;
+}
+.cleft {
+	margin-right:20px;
+	margin-left:15px;
+	padding-left:20px;
+	padding-right:20px;
+	float:left;
+	width:610px;
+	background-color:#fff;
+}
+.help {
+	color: #dd480e;
+}
+
+.helplist {
+	color:#666;
+}
+.helplist p {
+	font-family: SimSun;
+	font-size: 14px;
+	color: #888;
+}
+
+
+
+.cright {
+	float:left;
+	margin-right:15px;
+	width:300px;
+	height:800px;
+	background-color:#fff;
+}
+
+.inport {
+	position:relative;
+	margin-left: 20px;
+	margin-top: 50px;
+	height: 50px;
+	width: 260px;
+}
+.search {
+	height: 50px;
+	width: 200px;
+	border-radius: 5px;
+	background-color: #dadada;
+	padding-left: 10px;
+	padding-right: 50px;
+	border: 0;
+	font-family: "Microsoft YaHei";
+	font-size: 14px;
+	line-height: 48px;
+	color: #a9a9a9;
+}
+.seabtn {
+	position:absolute;
+	right:0px;
+	height:52px;
+	width:50px;
+	background-image: url(../image/search.gif);
+	background-repeat: no-repeat;
+	border:0;
+	background-color: #dadada;
+	border-radius: 5px;
+}
+.guidelist {
+	margin-left: 20px;
+	margin-top: 50px;
+	height: 50px;
+	width: 260px;
+}
+.guidelist span {
+	font-family: "Microsoft YaHei";
+	font-size: 18px;
+	text-decoration: none;
+	color: #666;
+	font-weight: bold;
+}
+.guideul {
+	list-style-type: none;
+	margin-top:20px;
+}
+.guideul li {
+	margin-left: -40px;
+	height:50px;
+	font-family: "Microsoft YaHei";
+	font-size: 16px;
+	text-decoration: none;
+	color: #999;
+	line-height: 50px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #ddd;
+}
+.guidevideo {
+	font-family: "Microsoft YaHei";
+	font-size: 18px;
+	color: #666;
+	font-weight: bold;
+	margin-left: 20px;
+	margin-top:550px;
+}
+.guidevideo a {
+	font-family: "Microsoft YaHei";
+	font-size: 18px;
+	color: #666;
+	font-weight: bold;
+	text-decoration: none;
+}

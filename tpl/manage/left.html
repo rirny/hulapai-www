@@ -1,0 +1,77 @@
+<!-- BEGIN SIDEBAR -->
+<div class="sidebar-scroll">
+<div id="sidebar" class="nav-collapse collapse">
+ <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+ <div class="navbar-inverse">
+	<form class="navbar-search visible-phone">
+	   <input type="text" class="search-query" placeholder="Search" />
+	</form>
+ </div>
+ <!-- END RESPONSIVE QUICK SEARCH FORM -->
+ <!-- BEGIN SIDEBAR MENU -->
+  <ul class="sidebar-menu">
+	  <li class="sub-menu<!--{if $active == 'index'}--> active<!--{/if}-->">
+		  <a class="" href="index.html">
+			  <i class="icon-dashboard"></i>
+			  <span>系统后台</span>
+		  </a>
+	  </li>
+	  <li class="sub-menu<!--{if $active == 'user'}--> active<!--{/if}-->">
+		  <a href="/user" class="">
+			  <i class="icon-user"></i>
+			  <span>用户管理</span>
+			  <span class=""></span>
+		  </a>		 
+	  </li>
+
+	  <li class="sub-menu<!--{if $active == 'task'}--> active<!--{/if}-->">
+		  <a href="javascript:;" class="">
+			  <i class="icon-time"></i>
+			  <span>任务管理</span>
+			  <span class="arrow"></span>
+		  </a>
+		  <ul class="sub">
+			  <li <!--{if $active == 'task' && $sub == 'index'}-->class="active"<!--{/if}-->><a class="" href="/screen">壁纸任务</a></li>
+			  <li <!--{if $active == 'task' && $sub == 'new'}-->class="active"<!--{/if}-->><a class="" href="/screen/new">添加壁纸任务</a></li>
+			  <li <!--{if $active == 'task' && $sub == 'survey'}-->class="active"<!--{/if}-->><a class="" href="/survey">问卷调查</a></li>
+			  <li <!--{if $active == 'task' && $sub == 'survey_new'}-->class="active"<!--{/if}-->><a class="" href="/survey/new">添加问卷</a></li>
+		  </ul>
+	  </li>
+	  <li class="sub-menu<!--{if $active == 'exchange'}--> active<!--{/if}-->">
+		  <a href="javascript:;" class="">
+			  <i class="icon-stackexchange"></i>
+			  <span>兑换管理</span>
+			  <span class="arrow"></span>
+		  </a>
+		  <ul class="sub">
+			  <li <!--{if $active == 'exchange' && $sub == 'index'}-->class="active"<!--{/if}-->><a class="" href="/exchange/">兑换物品</a></li>
+			  <li <!--{if $active == 'exchange' && $sub == 'new'}-->class="active"<!--{/if}-->><a class="" href="/exchange/new">添加物品</a></li>
+			  <li <!--{if $active == 'exchange' && $sub == 'recorde'}-->class="active"<!--{/if}-->><a class="" href="/exchange/record">兑换记录</a></li>
+		  </ul>
+	  </li>
+	  <li class="sub-menu<!--{if $active == 'supplier'}--> active<!--{/if}-->">
+		  <a href="javascript:;" class="">
+			  <i class="icon-male"></i>
+			  <span>供应商管理</span>
+			  <span class="arrow"></span>
+		  </a>
+		  <ul class="sub">
+			  <li <!--{if $active == 'supplier' && $sub == 'index'}-->class="active"<!--{/if}-->><a class="" href="/supplier">供应商</a></li>
+			  <li <!--{if $active == 'supplier' && $sub == 'new'}-->class="active"<!--{/if}-->><a class="" href="/supplier/new">添加供应商</a></li>			  
+		  </ul>
+	  </li>
+	  <li class="sub-menu<!--{if $active == 'cash'}--> active<!--{/if}-->">
+		  <a href="javascript:;" class="">
+			  <i class="icon-jpy"></i>
+			  <span>提现记录</span>
+			  <span class="arrow"></span>
+		  </a>
+		  <ul class="sub">
+			  <li <!--{if $active == 'cash' && $sub == 'alipay'}-->class="active"<!--{/if}-->><a class="" href="/alipay">支付宝</a></li>			  
+		  </ul>
+	  </li>	 
+  </ul>
+ <!-- END SIDEBAR MENU -->
+</div>
+</div>
+<!-- END SIDEBAR -->

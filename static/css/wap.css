@@ -1,0 +1,63 @@
+@charset "utf-8";
+html{background:#f6f6f6;}
+body { background:#f6f6f6; font-size: 16px; color: #3e3e3e; line-height: 170%; margin:14px auto; padding:0 }
+img,input{ border:0}
+
+form,textarea,p,h4,h3,dt,dd{ margin:0; padding:0;}
+h3{ font-weight:normal}
+table{width:100%}
+.screen_gray{ height:100%;width:100%;background:#000; opacity:0.4; position:fixed; left:0; top:0; z-index:1100}
+.screen_gray_all{ height:100%;width:100%;position:fixed; left:0; top:0; z-index:1201}
+ul li{ list-style:none;}
+
+/*输入框 按钮*/
+.row_box{padding:10px 14px}
+.row_box h2{margin:0 0 2px 0 ;font-size: 15px;padding: 0; color: #666}
+.row_box h2 span{float: right; text-align: right; color: #2fcc71}
+
+.input{ -webkit-box-shadow:0px 1px 3px rgba(0,0,0,0.16); background: #fff;height:42px; line-height:42px; border-radius: 2px; color: #444; width: 98%; padding-left: 2%;}
+.button{background: #f98167;color:#fff; border:0px;text-align: center;height:44px; line-height:45px; margin-top:4px; overflow:hidden; font-size:19px;-webkit-box-shadow:0px 1px 3px rgba(0,0,0,0.0);}
+.button:hover{ background:#e16c54}
+.yulan{ font-size:14px;color: #999;font-weight:normal;}
+.yulan i{color:#ff7151; font-style:normal ;font-weight:bold}
+.yulan b{font-weight:normal}
+
+/*兑换内容*/
+.panel_ul{ margin:0; padding:0;}
+.title h4{ margin:10px 0; font-size:18px; color:#ff7151;}
+.table_title{ height:44px; line-height:48px; color:#999; overflow:hidden; font-size:15px; font-weight:bold}
+.inputs{ width:97%; padding-left: 2%; text-indent:1em; border:1px solid #ccc; border-radius:4px;}
+textarea{ resize:none}
+.select_outbox{ padding:0 0 20px 0; height:90px}
+.select_ca{ margin:5px 0; width:48%; float:left; background:#fff; color:#333; height:46px; line-height:46px; text-align:center; border-radius:2px;-webkit-box-shadow:0px 1px 3px rgba(0,0,0,0.16);}
+.select_ca_se{ background:#fff1c7 !important; color:#ff7151;-webkit-box-shadow:0px 1px 3px #e1cb8c;}
+
+.panel_ul{ padding:10px;text-align:center; color:#777}
+.panel_ul li{ text-align:center; color:#777}
+.table_title{font-size:22px; height:40px; line-height:34px; color:#ff7151 !important; text-align:center}
+
+/*下拉框*/
+.select_box{ -webkit-box-shadow:0px 1px 3px rgba(0,0,0,0.12); -webkit-border-radius:2px; height:42px; background:#fff; position:relative;}
+.select_box span{ position:absolute; z-index:1; display:block; height:42px; line-height:42px; text-align:center}
+.select_box select{width:100%; height:40px; position:absolute; z-index:6; left:0; top:0; opacity:0;}
+.select_box .select_text{ height:100%; width:100%; position:absolute; left:0; top:0; z-index:2;}
+.select_box .down_icon{  border-color: #aaa transparent transparent transparent;border-style: solid;position: absolute;right: 11px;top:17px;border-width: 9px 9px 0px 9px;width: 0;height: 0;}
+
+.queren{margin:15px auto; background:#fff; -webkit-border-radius:5px;}
+.queren .title{height:50px; clear:both; line-height:50px; font-size:18px;-webkit-border-radius:5px 5px 0 0;background:#fbfbfb; text-align:center;}
+.queren .row{height:50px; clear:both; width:90%; margin:0px auto; line-height:50px; border-bottom:1px dotted #ccc; color:#777 }
+.queren .row strong{ color:#ff7151}
+.queren .row span{color:#333}
+
+ /*记录列表*/
+.history_list{height:40px; padding: 8px 0 6px 0; border-bottom: 1px dotted #ddd; margin:0 16px;}
+.row{height:20px;line-height: 20px;clear: both; font-size:14px;}
+.his_title{color:#333; float: left; font-weight:bold}
+.his_money{float: right;text-align: right;font-weight:bold}
+.his_date{float: left; color:#444}
+.his_pros{float: right;text-align: right}
+
+.tips_icon{height:60px;width:60px; background:url(http://img.fengkuang99.com/res/icon_i.png) no-repeat; background-size:100% 100%;margin:90px auto 5px auto; }
+.article { text-align:center; margin-bottom:5px; padding-top:10px; color:#999}
+.button_more{margin:15px auto; height:34px; line-height:35px; width:100px; background:#d9d9d9; border-radius:36px; text-align:center; color:#fff; font-size:16px;}
+.button_more:hover{ background:#bbb; color:#fff; }

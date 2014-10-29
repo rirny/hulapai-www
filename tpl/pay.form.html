@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>提现到支付宝</title>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
+    <link rel="stylesheet" media="screen" href="http://img.fengkuang99.com/res/webview_normal.css" type="text/css" />
+    <script type="text/javascript" src="/Js/jquery.md5.js"></script>
+    <script type="text/javascript" src="/Js/rsa.js"></script>
+    <script type="text/javascript">
+        /*加密*/
+        function rsadefaultkey() {
+            setMaxDigits(129);
+            if (!!this.key) {
+                return this.key;
+            }
+            var exponent = '010001';
+        var modulus = 'B38E60D71A13CFC17622BD1AB5A87A5902B4DD4B03E712FF014F7326B0FAA6333C7540422AA9972D9E221A2B41F3DA53DA1C1278A298EE457D7267DE60F3CF149CF1BC109A7742F7AC6D7ED79CDA110780039C06D4D3D3A8827D4FD055D8802B50FFA509B76AD34BC92AEFDCA2EAB6AB980C3E7F8812E4CCD97936840BF4D1D7';
+        this.key = new RSAKeyPair(exponent, "", modulus);
+        return this.key;
+    }
+    String.prototype.rsa = function () {
+        setMaxDigits(129);
+        return encryptedString(rsadefaultkey(), encodeURIComponent(this)).replace(/ /g, ",");
+    }
+    String.prototype.md5 = function () {
+        return $.md5(this);
+    }
+    </script>
+
+    <!-----jquery模版引擎 ------>
+    <script type="text/javascript" src="/Js/jquery.tmpl.min.js"></script>
+    <!-----触摸事件\处理击透事件 ------>
+    <!---<script type="text/javascript" src="/Js/quo.js"></script>----->
+    <script type="text/javascript" src="/Js/jquery.hammer.min.js"></script><!-------->
+    <!-----触摸事件\处理击透事件 ------>
+    <script type="text/javascript" >
+        /*事件*/
+        var eventstart = "touchstart";//"touch";
+        var eventend = "touchend";//"release"
+        var eventclick = "tap.task";//"touchend.task";
+        var swipeLeft = swipeleft = "swipeleft";
+        var swipeRight = swiperight = "swiperight";
+        var tap = "tap";
+        var swipe = "swipe";
+    </script>
+    <!--goback---exitapp-->
+    <script type="text/javascript">
+        ///执行goback"按了返回键"
+        function goback() {
+        }
+        ///退出app
+        function exitapp() {
+            if (typeof (Update) != "undefined" && !!Update && !!Update.exitActivity) {
+                Update.exitActivity();
+            }
+        }
+        ///退出app
+        function closeapp() {
+            if (typeof (Update) != "undefined" && !!Update && !!Update.exitActivity) {
+                Update.exitActivity(); Update.exitActivity();
+            }
+        }
+        goback = closeapp;
+    </script>
+    <!-----Form表单值/分页 ------>
+<script type="text/javascript" >
+        /***获取Form表单中的所有元素及值的拼接字符串如:name=5&sex=男&age=0***/
+        /***filter:function(el){return el.name=='a';}***/
+        /**isgetjson:如果是True则返回Json字符串**/
+        function formquery(formid, filter, isgetjson) {
+            isgetjson = !!isgetjson;
+            var el = document.getElementById(formid);
+            if (el == null) {
+                return "";
+            }
+            var els;
+            if (el.tagName.toLowerCase() != "form") {
+                if (typeof ($) == "undefined") { return ""; }
+                els = Array.prototype.slice.call($(el).find("input,select,textarea,radio,checkbox"));
+            } else {
+                els = el.elements;
+            }
+            if (typeof (els) == "undefined") { return ""; }
+            filter = filter || function (el) { return false; };
+            var result = (isgetjson ? {} : []),
+				l = els.length,
+				i = 0,
+				push = isgetjson ? function (name, value) {
+				    if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+				        value = HTMLEncode(value);
+				    }
+				    result[encodeURIComponent(name)] = encodeURIComponent(value);
+				} : function (name, value) {
+				    if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+				        value = HTMLEncode(value);
+				    }
+				    result.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
+				};
+            var selectobj = {}, iscantselect = false;
+            var pushselect = function (name, value) {
+                if (name in selectobj) {
+                    if (!!value) {
+                        var c = selectobj[name];
+                        selectobj[name] = (!!c ? c + "," : "") + value;
+                    }
+                } else {
+                    iscantselect = true;
+                    selectobj[name] = value;
+                }
+            };
+            for (; i < l; ++i) {
+                el = els[i];
+                var name = el.name;
+                if (el.disabled || !name || filter(el)) { continue; }
+                switch (el.type) {
+                    case "text":
+                    case "hidden":
+                    case "password":
+                    case "textarea":
+                        push(name, el.value);
+                        break;
+                    case "radio":
+                        pushselect(name, el.checked ? el.value : "");
+                        break;
+                    case "checkbox":
+                        pushselect(name, el.checked ? el.value : "");
+                        break;
+                    case "select-one":
+                        if (el.selectedIndex > -1) { push(name, el.value); }
+                        break;
+                    case "select-multiple":
+                        var opts = el.options;
+                        for (var j = 0; j < opts.length; ++j) {
+                            if (opts[j].selected) { push(name, opts[j].value); }
+                        }
+                        break;
+                }
+            }
+            if (iscantselect) {
+                for (var prop in selectobj) {
+                    push(prop, selectobj[prop]);
+                }
+            }
+            return isgetjson ? objtojson(result) : result.join("&");
+        }
+        /*
+        * 分页函数:count:总共多少条
+        * pageurl:分页Url，其中把分页数字用{0}代替
+        */
+        jQuery.fn.ludapage = function (count, pageurl, opts) {
+            if (count < 1) {
+                return;
+            }
+            var pageid = (new Date()).valueOf();
+            if (!$.allpage) {
+                $.allpage = {};
+            }
+            $.allpage[pageid] = {};
+            var def_opts = {
+                pagecount: 10, //每页条数
+                display_minnum: 5, //页数少于display_minnum时，不显示上下页等
+                current_index: 1, //当前页
+                count: 0, //总条数
+                yecount: 0, //总页数
+                isajax: false,//是否异步分页（异步分页的话，前面的pageurl获取的是异步数据）
+                ajaxquery: '',//若为异步必须有该参数; 传函数（无参数，调用后返要替换掉的页面部分），也可传Jquery选择符，每次获取分页后把选择部分删除
+                insertquery: null,//可不传参数(若不传则分页内容插入替换内容后面); 传函数（无参数，调用后返要在其后插入分页内容的元素），也可传Jquery选择符，每次获取分页后把分页内容插入选择元素后
+                callback: function () {
+                    if (typeof (table_upcolor) == "function" && !!table_upcolor) {
+                        table_upcolor();
+                    }
+                    return false;
+                }
+            };
+            $(def_opts).attr("count", count);
+            if (opts) { $(def_opts).attr(opts); }
+            if (!!def_opts.isajax) {
+                if (typeof (def_opts.ajaxquery) != "function") {
+                    if (!def_opts.ajaxquery) {
+                        def_opts.ajaxquery = "tr:not(.ludapagetr)";//insertquery:".ludapagetr:first"
+                    }
+                    def_opts.ajaxquery = (function (query) {
+                        return function () { return $(query); };
+                    })(def_opts.ajaxquery);
+                }
+                var afterquery = ".ludapagetr:first";
+                if (!def_opts.insertquery) {
+                    /*def_opts.insertquery=(function(fu,qu){
+                        return function(){ 
+                            var o=fu();
+                            if(!!o&&o.length>0){
+                                return o.last();
+                            }
+                            return $(qu);
+                        };
+                    })(def_opts.ajaxquery,afterquery);*/
+                } else {
+                    if (typeof (def_opts.insertquery) != "function") {
+                        def_opts.insertquery = (function (query) {
+                            return function () { return $(query); };
+                        })(def_opts.insertquery || afterquery);
+                    }
+                }
+            }
+            opts = def_opts;
+            /*获取分页内容插入元素后*/
+            var get_after_dom = function () {
+                var i_tr = null;
+                if (!!opts.insertquery) {
+                    i_tr = opts.insertquery();
+                    if (!!i_tr && i_tr.length > 0) {
+                        return i_tr;
+                    }
+                }
+                i_tr = basepage.parent().prev().first();
+                if (i_tr != null) {
+                    return i_tr;
+                }
+                return null;
+            }
+            /*异步分页内容处理*/
+            var setphtml = function (setfn) {
+                var oldtrs = opts.ajaxquery();
+                var i_tr = null;
+                var removefn = null;
+                if (!!oldtrs && oldtrs.length > 0) {
+                    if (!opts.insertquery) {
+                        i_tr = oldtrs.last();
+                    }
+                    else {
+                        i_tr = get_after_dom();
+                    }
+                    removefn = (function (x) {
+                        return function () {
+                            x.remove();
+                        };
+                    })(oldtrs);
+                } else {
+                    i_tr = get_after_dom();
+                    removefn = function () { };
+                }
+                setfn(i_tr, removefn);
+            }
+            /*确定分页地址*/
+            var geturl = !!pageurl ? function go(p) { return pageurl.replace(/\{0\}/g, p); } : function (a) { return document.location.href.replace(/index=\d+/g, 'index=' + a); };
+            /*分页调用*/
+            var callback = !opts.isajax ? function go(p) {
+                p = p > opts.yecount ? opts.yecount : p;
+                location.href = geturl(p);
+            } : function (p) {
+                p = p > opts.yecount ? opts.yecount : p;
+                $.ajax({
+                    url: geturl(p),
+                    processData: false,
+                    success: function (data) {
+                        //$("#loader_cl").hide();
+                        if (!!data) {
+                            var setfun = function (i_tr, fn_t) {
+                                if (i_tr != null) {
+                                    i_tr.after(data);
+                                    fn_t();
+                                    opts.current_index = p;
+                                    basepage.html(gethtml());
+                                    return;
+                                }
+                                fn_t();
+                            };
+                            setphtml(setfun);
+                            opts.callback();
+                        } else {
+                            alert('暂无更多记录');
+                        }
+                    },
+                    error: function (event) {
+                        alert('请求数据出错');
+                    }
+                });
+            };
+            opts.yecount = Math.ceil(opts.count / opts.pagecount);
+            function getli() {
+                return '<li><a href="javascript:void(0);" ontouchstart="$.ludapagego(' + pageid + ',{0})">{0}</a></li>';
+            }
+            function getselectli() {
+                return '<li><a href="javascript:void(0);" class="ludapage_select" style="background-color: #72b63b;  color: #fff; font-weight: bold; background-position: initial initial; background-repeat: initial initial;">{0}</a></li>';
+            }
+            function getli_texthtml(index, text) {
+                i = 0;
+                return getli().replace(/{0\}/g, function () {
+                    i++;
+                    return i == 1 ? index : text;
+                });
+            }
+            function getli_numberhtml(start, count) {
+                var li = getli();
+                return new Array(count + 1).join("x").replace(/x/g, function (m, n) {
+                    if (start + n == opts.current_index) {
+                        return getselectli().replace(/{0\}/g, function () { return start + n; });
+                    }
+                    return li.replace(/{0\}/g, function () { return start + n; });
+                });
+            }
+            function getfoot() {
+                var foot = '<li style="float: left; width: 150px; padding-left: 10px;">共' + opts.yecount + '页<input type="text" id="ludapagesubbut' + pageid + '" pageid="' + pageid + '" onkeypress="$.numberkeypress(event);" onkeydown="$.pagelocal(event,' + pageid + ');" style="width: 30px; border: 1px solid #ccc; border-radius: 3px;"><input id="go' + pageid + '" type="button" value="GO" ontouchstart="$.pagesub(' + pageid + ')"></li>';
+                return foot;
+            }
+            function gethtml() {
+                var html = "";
+                if (opts.yecount < opts.display_minnum) {
+                    html += getli_numberhtml(1, opts.yecount);
+                } else {
+                    if (opts.current_index > 1) {
+                        html += getli_texthtml(1, '|<');
+                        html += getli_texthtml(opts.current_index - 1, '<<');
+                    }
+                    if (opts.current_index <= Math.ceil(opts.display_minnum / 2)) {
+                        html += getli_numberhtml(1, opts.display_minnum);
+                    } else if (opts.current_index > opts.yecount - Math.ceil(opts.display_minnum / 2)) {
+                        html += getli_numberhtml(opts.yecount - opts.display_minnum + 1, opts.display_minnum);
+                    } else {
+                        var s_y_i = opts.current_index - Math.ceil(opts.display_minnum / 2) + 1;
+                        html += getli_numberhtml(s_y_i, opts.display_minnum);
+                    }
+                    if (opts.current_index < opts.yecount) {
+                        html += getli_texthtml(opts.current_index + 1, '>>');
+                        html += getli_texthtml(opts.yecount, '>|');
+                    }
+                    html += getfoot();
+                }
+                html += '<li style="padding: 5px;float: right; width: auto;">共 ' + count + ' 条记录</li>';
+                return html;
+            }
+            $.allpage[pageid]["callback"] = callback;
+
+            var baseenl = this.find(".ludapage");
+            var basepage = baseenl.length > 0 ? $(baseenl[0]) : $(this.append('<ul class="ludapage" id="pagination-digg"></ul>').find(".ludapage")[0]);
+            //var basepage = this.hasClass("ludapage")?this:this.addClass("ludapage");
+            basepage.html(gethtml());
+
+            if (!$.ludapageinit) {
+                $.ludapageinit = true;
+                $.ludapagego = function (pageid_t, p) {
+                    if (!pageid_t || !p || !$.allpage || !$.allpage[pageid_t] || !$.allpage[pageid_t]["callback"]) { return; }
+                    $.allpage[pageid_t]["callback"].call(this, p);
+                };
+                $.numberkeypress = function (e) {
+                    var ev;
+                    if (document.all == null) {
+                        ev = e;
+                    } else {
+                        ev = document.all ? window.event : e;
+                    }
+                    if (ev.keyCode > 47 && ev.keyCode < 58) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                };
+                $.pagesub = function (pageid_t) {
+                    if (!pageid_t) { return; }
+                    var obj = $("#ludapagesubbut" + pageid_t);
+                    if (obj.length > 0) {
+                        var gonumber = obj.val();
+                        if (gonumber != "") {
+                            if (gonumber.match(/^[0-9]+?$/g) != null) {
+                                if (gonumber < 1) {
+                                    gonumber = 1;
+                                }
+                                $.ludapagego(pageid_t, gonumber);
+                            }
+                        }
+                    }
+                }
+                $.pagelocal = function (e, pageid_t) {
+                    var ev;
+                    if (document.all == null) {
+                        ev = e;
+                    } else {
+                        ev = document.all ? window.event : e;
+                    }
+                    if (ev.keyCode == 13) {
+                        $.pagesub(pageid_t);
+                    }
+                }
+            }
+        }
+        /*加载省份*/
+        function changeprovince(obj) {
+            var pid = $(obj).val();
+            if (pid == 0) { return; }
+            var cityselect = $("#CityID");
+            if (cityselect.length == 0) {
+                return;
+            }
+            $.getJSON("/BaseWeb/CityJson", { ProvinceID: pid }, function (jsondata) {
+                if (!jsondata || jsondata.length == 0) {
+                    return;
+                }
+                var citydef = $("#CityID option[value=0]");
+                var cityoption = citydef.length == 0 ? '' : '<option value="0">' + citydef.html() + '</option>';//请选择市
+                for (var i = 0; i < jsondata.length; i++) {
+                    if (!jsondata[i]) {
+                        break;
+                    }
+                    var citydata = jsondata[i];
+                    if (!citydata.CityID || !citydata.CityName) {
+                        break;
+                    }
+                    cityoption += '<option value="' + citydata.CityID + '" ' + (jsondata.length == 1 ? 'selected="selected"' : '') + ' >' + citydata.CityName + '</option>'
+                }
+                cityselect.html(cityoption);
+            });
+        }
+        /*加载市区*/
+        function changecity(obj) {
+            var cid = $(obj).val();
+            if (cid == 0) { return; }
+            var districtselect = $("#DistrictID");
+            if (districtselect.length == 0) {
+                return;
+            }
+            $.getJSON("/BaseWeb/DistrictJson", { CityID: cid }, function (jsondata) {
+                if (!jsondata || jsondata.length == 0) {
+                    return;
+                }
+                var districtdef = $("#DistrictID option[value=0]");
+                var districtoption = districtdef.length == 0 ? '' : '<option value="0">' + districtdef.html() + '</option>';//请选择市
+                for (var i = 0; i < jsondata.length; i++) {
+                    if (!jsondata[i]) {
+                        break;
+                    }
+                    var districtdata = jsondata[i];
+                    if (!districtdata.DistrictID || !districtdata.DistrictName) {
+                        break;
+                    }
+                    districtoption += '<option value="' + districtdata.DistrictID + '" ' + (jsondata.length == 1 ? 'selected="selected"' : '') + ' >' + districtdata.DistrictName + '</option>'
+                }
+                districtselect.html(districtoption);
+            });
+        }
+    </script>
+    <!--js伪编码解码-->
+<script type="text/javascript">
+    function HTMLEncode(html) {
+        var temp = document.createElement("div");
+        (temp.textContent != null) ? (temp.textContent = html) : (temp.innerText = html);
+        var output = temp.innerHTML;
+        temp = null;
+        return output;
+    }
+    function HTMLDecode(text) {
+        var temp = document.createElement("div");
+        temp.innerHTML = text;
+        var output = temp.innerText || temp.textContent;
+        temp = null;
+        return output;
+    }
+</script>
+    <!-----队列类Queue/HashMap对象/定时队列 ------>
+<script type="text/javascript">
+    /*
+    * 定义队列类:实现队列基本功能
+    */
+    function Queue() {
+        //存储元素数组
+        var aElement = new Array();
+        /*
+        * 元素入队: 返回当前队列元素个数
+        * param: vElement元素列表
+        * remark: 1.Add方法参数可以多个
+        *    2.参数为空时返回-1
+        */
+        Queue.prototype.add = function (vElement) {
+            if (arguments.length == 0)
+                return -1;
+            //元素入队
+            for (var i = 0; i < arguments.length; i++) {
+                aElement.push(arguments[i]);
+            }
+            return aElement.length;
+        }
+        /*
+        * 元素出队: 当队列元素为空时,返回null
+        */
+        Queue.prototype.shift = function () {
+            if (aElement.length == 0)
+                return null;
+            else
+                return aElement.shift();
+
+        }
+        /*
+        * brief: 获取队列元素个数
+        * return: 元素个数
+        */
+        Queue.prototype.GetSize = function () {
+            return aElement.length;
+        }
+        /*
+        * brief: 返回队头素值
+        * return: vElement
+        * remark: 若队列为空则返回null
+        */
+        Queue.prototype.GetHead = function () {
+            if (aElement.length == 0)
+                return null;
+            else
+                return aElement[0];
+        }
+        /*
+        * brief: 返回队尾素值
+        * return: vElement
+        * remark: 若队列为空则返回null
+        */
+        Queue.prototype.GetEnd = function () {
+            if (aElement.length == 0)
+                return null;
+            else
+                return aElement[aElement.length - 1];
+        }
+        /*
+        * brief: 将队列置空
+        */
+        Queue.prototype.Clear = function () {
+            aElement.length = 0;
+        }
+        /*
+        * brief: 判断队列是否为空
+        * return: 队列为空返回true,否则返回false
+        */
+        Queue.prototype.IsEmpty = function () {
+            if (aElement.length == 0)
+                return true;
+            else
+                return false;
+        }
+        /*
+        * brief: 将队列元素转化为字符串
+        * return: 队列元素字符串
+        */
+        Queue.prototype.toString = function () {
+            var sResult = (aElement.reverse()).toString();
+            aElement.reverse()
+            return sResult;
+        }
+    }
+    /*定义hash，用来处理键值对*/
+    function HashMap() {
+        /**Map大小**/
+        var size = 0;
+        /**对象**/
+        var entry = new Object();
+        /**Map的存set方法**/
+        this.set = function (key, value) {
+            if (!this.containsKey(key)) {
+                size++;
+            }
+            entry[key] = value;
+        }
+        /**Map取get方法**/
+        this.get = function (key) {
+            return this.containsKey(key) ? entry[key] : null;
+        }
+        /**Map删除remove方法**/
+        this.remove = function (key) {
+            if (this.containsKey(key) && (delete entry[key])) {
+                size--;
+            }
+        }
+        /**是否包含Key**/
+        this.containsKey = function (key) {
+            return (key in entry);
+        }
+        /**是否包含Value**/
+        this.containsValue = function (value) {
+            for (var prop in entry) {
+                if (entry[prop] == value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        /**所有的Value**/
+        this.values = function () {
+            var values = new Array();
+            for (var prop in entry) {
+                values.push(entry[prop]);
+            }
+            return values;
+        }
+        /**所有的 Key**/
+        this.keys = function () {
+            var keys = new Array();
+            for (var prop in entry) {
+                keys.push(prop);
+            }
+            return keys;
+        }
+        /**枚举单个元素(参数为要遍历执行的函数:return false结束循环)**/
+        this.getkeyvalue = function (fun) {
+            if (!fun || typeof (fun) != "function") { return; }
+            for (var prop in entry) {
+                var retval = fun({ key: prop, value: entry[prop] });
+                if (retval === false) {
+                    break;
+                }
+            }
+        }
+        /**Map size**/
+        this.count = this.length = this.size = function () {
+            return size;
+        }
+        /**清空Map**/
+        this.clear = function () {
+            size = 0;
+            entry = new Object();
+        }
+
+    }
+    /*定时执行队列任务（定时时间）
+    * 使用方法 new TaskQueue(1000).addTask(function(){console.log(1);});
+    */
+    function TaskQueue(tasktime) {
+        tasktime = tasktime || 100;
+        var taskList = new Queue();
+        var isrun = false;
+        var taskthis = this;
+        /*添加任务（task为函数）*/
+        this.addTask = function (task) {
+            taskList.add(task);
+            if (!isrun) {
+                isrun = true;
+                taskthis.Taskid = setInterval(function () {
+                    var taskitem = taskList.shift();
+                    if (!!taskitem) {
+                        taskitem();
+                    } else {
+                        isrun = false;
+                        clearInterval(taskthis.Taskid);
+                    }
+                }, tasktime);
+            }
+        };
+    }
+</script>
+<!---obj-to-json--数组初始化--->
+<script type="text/javascript">
+    function array_init(length, defval) {
+        var a_t = [];
+        new Array(length + 1).join('x').replace(/x/g, function () { a_t.push(defval); });
+        return a_t;
+    }
+    Array.prototype.remove = function (dx) {
+        if (isNaN(dx) || dx > this.length) { return false; }
+        var isdel = 0;
+        for (var i = 0, n = 0; i < this.length; i++) {
+            if (this[i] != this[dx]) {
+                this[n++] = this[i]
+            } else {
+                isdel++;
+            }
+        }
+        if (isdel) { this.length -= isdel; }
+        return true;
+    }
+    Array.prototype.remove_val = function (val) {
+        var isdel = 0;
+        for (var i = 0, n = 0; i < this.length; i++) {
+            if (this[i] != val) {
+                this[n++] = this[i]
+            } else {
+                isdel++;
+            }
+        }
+        if (isdel) { this.length -= isdel; }
+        return this;
+    };
+    Array.prototype.indexOf = function (substr, start) {
+        var ta, rt, d = '\0';
+        if (start != null) { ta = this.slice(start); rt = start; } else { ta = this; rt = 0; }
+        var str = d + ta.join(d) + d, t = str.indexOf(d + substr + d);
+        if (t == -1) return -1; rt += str.slice(0, t).replace(/[^\0]/g, '').length;
+        return rt;
+    };
+    Array.prototype.find = Array.prototype.indexOf;
+
+    Array.prototype.lastIndexOf = function (substr, start) {
+        var ta, rt, d = '\0';
+        if (start != null) { ta = this.slice(start); rt = start; } else { ta = this; rt = 0; }
+        ta = ta.reverse(); var str = d + ta.join(d) + d, t = str.indexOf(d + substr + d);
+        if (t == -1) return -1; rt += str.slice(t).replace(/[^\0]/g, '').length - 2;
+        return rt;
+    };
+
+    Array.prototype.replace = function (reg, rpby) {
+        var ta = this.slice(0), d = '\0';
+        var str = ta.join(d); str = str.replace(reg, rpby);
+        return str.split(d);
+    };
+    /*Array.prototype.forEach = function (fun, obj) {
+        var len = this.length;
+        if (typeof fun != "function" || len==0)
+        { return false;}
+        for (var i = 0; i < len; i++) {
+            if (!fun.call(obj, this[i], i, this))
+                return false;
+        }
+        return true;
+    };*/
+    function objtojson(obj) {
+        if (JSON && JSON.stringify) {
+            return JSON.stringify(obj); /*obj.toJSONString();*/
+        } else {
+            return "";
+        }
+    };
+    function jsontoobj(jsonstr) {
+        try {
+            return eval('(' + jsonstr + ')'); // jsonstr.parseJSON(); // JSON.parse(jsonstr); 
+        }
+        catch (e) {
+            console.log("转化为js对象失败，原字符串：" + jsonstr);
+        }
+    }
+    /*控制小数位数*/
+    Number.prototype.fix = function (n) {
+        var pn = Math.pow(10, n);
+        return Math.round(this * pn) / pn;
+    }
+</script>
+    <!---获取页面地址栏参数--->
+<script type="text/javascript">
+    var querystring = new HashMap();
+    (function (query) {
+        var url = location.search; //获取url中"?"符后的字串
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                if (!strs[i]) {
+                    continue;
+                }
+                var t = strs[i].split("=");
+                query.set(t[0], t.length > 1 ? t[1] : "");
+            }
+        }
+    })(querystring);
+</script>
+    <!--js时间json时间-->
+    <script type="text/javascript">
+        ////把json返回来的时间转换成date
+        function parsejsonobjtodate(jsondate) {
+            return new Date(parseInt(jsondate.replace("/Date(", "").replace(")/", ""), 10));
+        }
+        ///传DATE返加年月日字符串
+        function getdate(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            if (day < 10) { day = "0" + day; }
+            return year + "-" + month + "-" + day;
+        }
+        ///传DATE返加年月日时分秒字符串
+        function getdatetime(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            if (day < 10) { day = "0" + day; }
+            var hh = date.getHours();
+            var mm = date.getMinutes();
+            var ss = date.getSeconds();
+            return year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
+        }
+        ////把json时间转成年月日字符串
+        function getjsondate(jsondate) {
+            return getdate(parsejsonobjtodate(jsondate));
+        }
+        ////把json时间转成年月日时分秒字符串
+        function getjsondatetime(jsondate) {
+            return getdatetime(parsejsonobjtodate(jsondate));
+        }
+        ////比较时间一和时间二是否相等
+        function datecompar(date1, date2) {
+            return date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate();
+        }
+        ////比较Json时间和一个时间字符串是否相等
+        function datecompar_json(jsondate, datestr) {
+            var date1 = parsejsonobjtodate(jsondate);
+            datestr = datestr.replace('-', '/'); //js不认2000-1-31,只认2000/1/31
+            return datecompar(date1, new Date(datestr));
+        }
+        ////时间1是否大于时间2(大于返回1，等于返回0，小于返回-1)（只比较年月日）
+        function date_ismax(date1, date2) {
+            if (date1.getFullYear() > date2.getFullYear()) {
+                return 1;
+            }
+            if (date1.getFullYear() < date2.getFullYear()) {
+                return -1;
+            }
+            if (date1.getMonth() > date2.getMonth()) {
+                return 1;
+            }
+            if (date1.getMonth() < date2.getMonth()) {
+                return -1;
+            }
+            if (date1.getDate() > date2.getDate()) {
+                return 1;
+            }
+            if (date1.getDate() < date2.getDate()) {
+                return -1;
+            }
+            return 0;
+        }
+        ////比较一个json时间是否大于一个时间字符串
+        function date_ismax_json(jsondate, datestr) {
+            var date1 = parsejsonobjtodate(jsondate);
+            datestr = datestr.replace('-', '/'); //js不认2000-1-31,只认2000/1/31
+            return date_ismax(date1, new Date(datestr));
+        }
+        function datestr_ismax_datestr(datestr1, datestr2) {
+            datestr1 = datestr1.replace('-', '/');
+            datestr2 = datestr2.replace('-', '/');
+            return date_ismax(new Date(datestr1), new Date(datestr1));
+        }
+    </script>
+    <!---弹窗---->
+    <script type="text/javascript">
+        function dosomething() { };
+        var oldalert = alert;
+        if (typeof (Update) != "undefined" && !!Update && !!Update.webDialog) {
+            alertmsginfo = function (title, msg, retfun) {
+                Update.webDialog((title + '').replace(/<br( )*(\/)*>/g, "\n"), (msg + '').replace(/<br( )*(\/)*>/g, "\n"));
+                dosomething = retfun;
+                //setTimeout(retfun, 100);
+            };
+        } else {
+            alertmsginfo = function (title, msg, retfun) {
+                oldalert((title + '\n' + msg + '').replace(/<br( )*(\/)*>/g, "\n"));
+                setTimeout(retfun, 500);
+            }
+        }
+        var alertparamfun = function (time, retufn) {
+            var t = 100;
+            if (!!time) {
+                if (typeof (time) == "function") {
+                    setTimeout(time, t);
+                    return;
+                } else if (typeof (time) == "number") {
+                    t = time;
+                }
+            }
+            if (!!retufn) {
+                if (typeof (retfun) == "function") {
+                    setTimeout(retfun, t);
+                }
+            }
+        }
+        if (typeof (Update) != "undefined" && !!Update && !!Update.webToast) {
+            alert = function (msg, time, retfun) {
+                Update.webToast((msg + '').replace(/<br( )*(\/)*>/g, "\n"));
+                alertparamfun(time, retfun);
+            };
+        } else {
+            alert = function (msg, time, retfun) {
+                oldalert((msg + '').replace(/<br( )*(\/)*>/g, "\n"));
+                alertparamfun(time, retfun);
+            };
+        }
+        var alertmsg = alert;
+    </script>
+    
+    <script type="text/javascript">
+        ///执行goback"按了返回键"
+        goback=closeapp;
+        var eventname=tap;
+        var toindex=closeapp;
+    </script>
+
+</head>
+<body>
+    
+
+    <div class="page" id="pagepass">
+        <div data-role="content">
+            <div class="row_box">
+                <h2>安全验证：<span class="forgetpass">忘记密码？</span></h2>
+                <input class="input" name="pass" id="pass" type="password" style="display: none" />
+                <input class="input" name="pass" id="jiapass" type="text" value="请输入登录密码" />
+                <script type="text/javascript">
+                    var jiapass_input=$("#jiapass");
+                    var pass_input=$("#pass");
+                    jiapass_input.focus(function(){
+                        $(this).hide();
+                        pass_input.show().focus();
+                    });
+                    pass_input.blur(function(){
+                        if($(this).val()=="")
+                        {
+                            $(this).hide();
+                            jiapass_input.show();
+                        }
+                    });
+                 </script>
+            </div>
+
+            <div class="row_box">
+                <h2>提现金额：</h2>
+                <div class="select_outbox" id="first">
+<div class="select_ca" ontouchend="changecoins(10,this)" >1元</div><div class="select_ca" ontouchend="changecoins(100,this)" style="float:right">10元</div><div class="select_ca" ontouchend="changecoins(200,this)" >20元</div><div class="select_ca" ontouchend="changecoins(500,this)" style="float:right">50元</div>
+                </div>
+                <div style="display: none">
+                    <input class="coins_input" name="coins" id="coins" type="number" value="" />
+                    <input class="banktype_input" name="banktype" id="banktype" type="number" value="1" />
+                </div>
+            </div>
+
+            <div class="row_box">
+                <h2>提示：<div class="yulan">需要<i id="excoins">xx金币</i>&nbsp;&nbsp;&nbsp;<b id="nowcoins" style="color: #999">当前账户：xx金币</b></div>
+                </h2>
+
+            </div>
+
+            <div class="row_box">
+                <div id="nextbut" class="button input">下一步</div>
+            </div>
+
+        </div>
+    </div>
+    
+
+    <div class="page" id="pagealipay" style="display: none">
+        <div data-role="content">
+
+            <div class="row_box">
+                <h2 id="alipaynum_title">支付宝账号（邮箱/手机号）：</h2>
+                <input class="input" name="alipaynum" id="alipaynum" type="text" value=""  />
+            </div>
+
+            <div class="row_box">
+                <h2 id="cnname_title">真实姓名：</h2>
+                <input class="input" name="cnname" id="cnname" type="text"  value="" />
+            </div>
+
+            <div class="row_box">
+                <div id="mybut" class="button input" style="float: left; width: 30%; background: #999">返回</div>
+                <div id="subform" class="button input" style="float: right; width: 60%">下一步</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="page" id="pagealipay_confirm" style="display: none">
+        <div data-role="content">
+            <div class="queren">
+                <div class="title">请确认</div>
+                <div class="row" id="money_title">提现金额：<strong>10金币</strong></div>
+                <div class="row" id="alipaynum_confirm">支付宝账号：<span>le@le.com</span></div>
+                <div class="row" id="cnname_confirm">真实姓名：<span>张三</span></div>
+            </div>
+
+            <div class="row_box">
+                <div id="cancelconfirmt" class="button input" style="float: left; width: 30%; background: #999">返回</div>
+                <div id="confirmtsubform" class="button input" style="float: right; width: 60%">确认申请</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="pagedone" style="display: none">
+        <div data-role="content">
+
+            <ul class="panel_ul">
+                <li class="table_title">恭喜，申请成功！</li>
+                <li></li>
+                <li id="success_title">您申请了**金币提现，已经提交成功</li>
+                <li>3-5个工作日到账</li>
+                <li>提现成功后，记得分享给您的小伙伴们哦~</li>
+            </ul>
+
+            <div class="row_box">
+                <div id="retnonebut" class="button input" style="/*float: left; width: 35%;*/ background: #999">返回提现中心</div>
+               <!-- <div id="nextexchange" class="button input" style="float: right; width: 55%;">分享</div>-->
+            </div>
+
+        </div>
+    </div>
+
+    <!--提现--->
+    <script type="text/javascript">
+        /*忘记密码接口**/
+        $(function(){
+            if(typeof(Update)!="undefined"&&!!Update&&!!Update.forgetPwd){
+                $(".forgetpass").hammer({}).bind(eventname,function(){
+                    Update.forgetPwd();
+                }).show();
+            }
+        });
+        /*兑现种类*/
+        var bankenum={zhifubao:1,caifutong:5,qq:10,phonecoins:15};
+        /*兑换次数*/
+        var exmoneycount=0;
+    /*兑现种类的兑换金币数数组*/
+    var coinslist=[];
+    coinslist=[10,100,200,500,1000];
+        /*兑现种类*/
+        var banktype=parseInt(1);
+        /*获取兑现种类的金币数目种类*/
+        function getbankcoins(){
+            if(!coinslist||coinslist.length==0){
+                return !!exmoneycount?[50]:[10];
+            }
+            return !!exmoneycount?coinslist.concat([]).remove_val(10):coinslist.concat([]);
+        }
+        /*获取兑现种类的最小金币数*/
+        function mincoins(){
+            return Math.min.apply(null,getbankcoins());
+        }
+        /*用户ID*/
+        var uid=24420;
+    /*用户金币数*/
+    var usercoins=parseInt(95);
+        $("#nowcoins").text("当前账户："+usercoins+"金币");
+        /*选择金币Html*/
+        function selectcoins(){
+            var html='';
+            var coinslist_t=getbankcoins();
+            if(!!coinslist_t&&coinslist_t.length>0){
+                for(var i=0;i<coinslist_t.length;i++){
+                    var style_html= i%2==1?'style="float:right"':'';
+                    var coins=coinslist_t[i];
+                    html+='<div class="select_ca" ontouchend="changecoins('+coins+',this)" '+style_html+'>'+coins+'金币</div>';
+                }
+            }
+            return html;
+        }
+        /*点击申请兑现*/
+        function topass(){
+            goback=toindex;
+            $("#pass").val("");
+            $(".page").hide();
+            $("#pagepass").show();
+        }
+        /*次数增加*/
+        function setexmoneycount(){
+            exmoneycount+=1;
+            $("#first").html(selectcoins(getbankcoins(banktype)));
+        }
+        if(usercoins<mincoins()){
+            alert("未达到最低起兑");
+        }
+        function toalipay(){
+            goback=topass;
+
+            switch(banktype){
+                case bankenum.caifutong:{
+                    $("#alipaynum_title").html("财付通账号:");
+                    $("#cnname_title").html("真实姓名:").parent().show();
+                    break;
+                }
+                case bankenum.qq:{
+                    $("#alipaynum_title").html("QQ账户:");
+                    $("#cnname_title").parent().hide();
+                    break;
+                }case bankenum.phonecoins:{
+                    $("#alipaynum_title").html("充值手机号:");
+                    $("#cnname_title").parent().hide();
+                    break;
+                }case bankenum.zhifubao:{
+                }
+                default:{
+                    $("#alipaynum_title").html("支付宝账号（邮箱/手机号）:");
+                    $("#cnname_title").html("真实姓名:").parent().show();
+                    break;
+                }
+            }
+            $(".page").hide();
+            $("#pagealipay").show();
+            isaddchange=false;
+        }
+        $("#mybut").hammer({}).bind(eventname,topass);
+        $("#nextexchange").hammer({}).bind(eventname,topass);
+
+        function toconfirm(){
+            goback=toalipay();
+            var dataobj=yz_my(true);
+            if(!dataobj){
+                return;
+            }
+            var iscantnull=false;
+            var alipaynum_title="支付宝账号";
+            var cnname_title="真实姓名";
+            var banktype= parseInt(dataobj.banktype);
+            var alipayisphonemail=false;
+            var coninstitle="提现金额：";
+            switch(banktype){
+                case bankenum.caifutong:{
+                    iscantnull=false;
+                    alipaynum_title="财付通账户";
+                    cnname_title="真实姓名";
+                    break;
+                }
+                case bankenum.qq:{
+                    iscantnull=true;
+                    alipaynum_title="QQ账户";
+                    coninstitle="充值金额：";
+                    break;
+                }case bankenum.phonecoins:{
+                    iscantnull=true;
+                    alipaynum_title="充值手机号";
+                    coninstitle="充值金额：";
+                    break;
+                }case bankenum.zhifubao:{
+                }
+                default:{
+                    iscantnull=false;
+                    alipaynum_title="支付宝账号";
+                    cnname_title="真实姓名";
+                    alipayisphonemail=true;
+                    break;
+                }
+            }
+            var alipaynumobj=$("#alipaynum");
+            var alipaynum=$.trim(alipaynumobj.val());
+            if(!alipaynum||alipaynum==''){
+                alert('请输入您的'+alipaynum_title);
+                $("#alipaynum").focus();
+                return;
+            }
+            if(alipayisphonemail){
+                var myreg = /^([a-zA-Z0-9-_]+[_|\_|\.]?)*[a-zA-Z0-9-_]+@([a-zA-Z0-9-_]+[_|\_|\.]?)*[a-zA-Z0-9-_]+\.[a-zA-Z]{2,3}$/;
+                if(alipaynum.match(/^1[3|4|5|9|8|7]\d{9}$/)==null&&alipaynum.match(myreg)==null)
+                {
+                    alert('请正确输入您的'+alipaynum_title);
+                    $("#alipaynum").focus();
+                    return;
+                }
+            }
+        
+            var cnname='';
+            if(!iscantnull){
+                var cnnameobj=$("#cnname");
+                cnname=$.trim(cnnameobj.val());
+                if(!cnname||cnname==''){
+                    $("#cnname").focus();
+                    alert('请输入您的'+cnname_title);
+                    return;
+                }
+            }
+            $("#money_title").html(coninstitle+'<strong>'+Math.floor(parseInt(dataobj.coins)/10)+'元</strong>（'+dataobj.coins+'金币）');
+            $("#alipaynum_confirm").html(alipaynum_title+'：<strong>'+alipaynum+'</strong>');
+            if(!iscantnull){
+                $("#cnname_confirm").html(cnname_title+'：<strong>'+cnname+'</strong>').show();
+            }else{
+                $("#cnname_confirm").hide();
+            }
+            $(".page").hide();
+            $("#pagealipay_confirm").show();
+            setTimeout(function(){isaddchange=true;},1000);
+        }
+
+        /**试用密码验证*/
+        function yz_my(isnotcurr){
+            var zy=function(){
+                if(!!isnotcurr){
+                    topass();
+                }
+            }
+            var pass=$.trim($("#pass").val());
+            if(!pass||pass==''){
+                zy();
+                $("#pass")[0].focus();
+                alert('请输入用户密码');
+                return;
+            }
+            var banktype=$("#banktype").val()||bankenum.zhifubao;
+            if(usercoins<mincoins()){
+                topass();
+                alert('您的金币达不到最低起兑条件,快去赚钱吧！');
+                return;
+            }
+            var coins=$.trim($("#coins").val());
+            if(!coins||coins==''){
+                zy();
+                alert('请选择您的兑换金币');
+                return;
+            }
+            /*if(coins.match(/^\d+$/)==null)
+            {
+                zy();
+                $("#coins").val('');
+                alert('兑换金币输入出错，请输入数字',null,function(){$("#coins").focus();});
+                return;
+            }
+            if(coins.match(/^\d+0$/)==null)
+            {
+                zy();
+                alert('兑换金币数必须是10的倍数',null,function(){$("#coins").focus();});
+                return;
+            }*/
+            if(getbankcoins(banktype).indexOf(coins)<0)
+            {
+                zy();
+                alert("兑换金币数选择错误，请选择规定的兑换数目！");
+                return;
+            }
+            coins=parseInt(coins);
+            if(coins>usercoins){
+                zy();
+                $("#coins").focus();
+                alert('您的账户余额不足'+coins+'金币,请重新输入');
+                return;
+            }
+            pass=$.md5(pass).rsa();
+            return {pwd:pass,coins:coins,banktype:banktype};
+        }
+        var isaddchange=false;
+        /**申请试用**/
+        function addchange() {
+            if(!isaddchange){
+                return;
+            }
+            var dataobj=yz_my(true);
+            if(!dataobj){
+                return;
+            }
+            var iscantnull=false;
+            var alipaynum_title="支付宝账号";
+            var cnname_title="真实姓名";
+            var success_tip="金币提现到支付宝";
+            var success_nextli="3-5个工作日到账";
+            var endli="提现";
+            var banktype= parseInt(dataobj.banktype);
+            var alipayisphonemail=false;
+            switch(banktype){
+                case bankenum.caifutong:{
+                    iscantnull=false;
+                    alipaynum_title="财付通账户";
+                    cnname_title="真实姓名";
+                    success_tip="金币提现到财付通";
+                    break;
+                }
+                case bankenum.qq:{
+                    iscantnull=true;
+                    alipaynum_title="QQ账户";
+                    success_tip="金币充值QQ币";
+                    endli="充值";
+                    break;
+                }case bankenum.phonecoins:{
+                    iscantnull=true;
+                    alipaynum_title="充值手机号";
+                    success_tip="金币充值手机话费";
+                    success_nextli="1-2个工作日到账";
+                    endli="充值";
+                    break;
+                }case bankenum.zhifubao:{
+                }
+                default:{
+                    iscantnull=false;
+                    alipaynum_title="支付宝账号";
+                    cnname_title="真实姓名";
+                    success_tip="金币提现到支付宝";
+                    alipayisphonemail=true;
+                    break;
+                }
+            }
+            var alipaynumobj=$("#alipaynum");
+            var alipaynum=$.trim(alipaynumobj.val());
+            if(!alipaynum||alipaynum==''){
+                alert('请输入您的'+alipaynum_title);
+                $("#alipaynum").focus();
+                return;
+            }
+            if(alipayisphonemail){
+                var myreg = /^([a-zA-Z0-9-_]+[_|\_|\.]?)*[a-zA-Z0-9-_]+@([a-zA-Z0-9-_]+[_|\_|\.]?)*[a-zA-Z0-9-_]+\.[a-zA-Z]{2,3}$/;
+                if(alipaynum.match(/^1[3|4|5|9|8|7]\d{9}$/)==null&&alipaynum.match(myreg)==null)
+                {
+                    alert('请正确输入您的'+alipaynum_title);
+                    $("#alipaynum").focus();
+                    return;
+                }
+            }
+        
+            var cnname='';
+            if(!iscantnull){
+                var cnnameobj=$("#cnname");
+                cnname=$.trim(cnnameobj.val());
+                if(!cnname||cnname==''){
+                    $("#cnname").focus();
+                    alert('请输入您的'+cnname_title);
+                    return;
+                }
+            }
+            var datastr="uid="+uid+"&pwd="+dataobj.pwd+"&coins="+dataobj.coins+"&cnname="+cnname+"&alipaynum="+alipaynum+"&banktype="+banktype;
+            $.ajax({
+                url: "/Change/AddChange",
+                type: "POST",
+                data:datastr,
+                processData: false,
+                success: function(data){
+                    if(!data){
+                        alert("申请兑现出错,请重试");
+                        location.reload();
+                        return;
+                    }
+                    if (!!data.success) {
+                        if(typeof(Update)!="undefined"&&!!Update&&!!Update.updateCoins){
+                            Update.updateCoins(parseInt(dataobj.coins));
+                        }
+                        var changeid=data.Otherid;
+                        $("#pass").val('');
+                        removecoin(dataobj.coins,dataobj.coins+success_tip,success_nextli,endli+"成功后，记得分享给您的小伙伴们哦~");
+                        setexmoneycount();
+                        return;
+                    }
+                    var callback=function (){
+                        switch(data.val){
+                            case -1:{
+                                location.reload();
+                                break;
+                            }
+                            case -2:{
+                                topass();
+                                break;
+                            }
+                            case -3:{
+                                location.reload();
+                                break;
+                            }
+                            case -4:{
+                                location.reload();
+                                break;
+                            }
+                            case -5:{}
+                            case -6:{}
+                            case -7:{}
+                            default:{
+                                toalipay();
+                                break;
+                            }
+                        }
+                    }
+                    alert(data.error);
+                    callback.call(this);
+                    return;
+                },
+                error:function(event){
+                    alert('申请兑现出错');
+                    location.reload();
+                }
+            });
+        }
+        /*申请提现后台验证*/
+        function verifypass(){
+            var dataobj=yz_my();
+            if(!dataobj){
+                return;
+            }
+            var datastr="uid="+uid+"&pwd="+dataobj.pwd+"&coins="+dataobj.coins+"&banktype="+dataobj.banktype;
+            $.ajax({
+                url: "/Change/ChangeLogin",
+                type: "POST",
+                data:datastr,
+                processData: false,
+                success: function(data){
+                    if(!data){
+                        alert("申请兑现验证密码出错,请重试");
+                        return;
+                    }
+                    if (!!data.success) {
+                        //alert('密码验证通过，请输入支付宝账号……');//removealert();
+                        toalipay();
+                        return;
+                    }
+                    alert(data.error);
+                    switch(data.val){
+                        case -1:{
+                            location.reload();
+                            break;
+                        }
+                        case -2:{
+                            topass();
+                            break;
+                        }
+                        case -3:{
+                            location.reload();
+                            break;
+                        }
+                        case -4:{
+                            location.reload();
+                            break;
+                        }
+                        default:{
+                        }
+                    }
+                    return;
+                },
+                error:function(event){
+                    alert('申请兑现验证密码出错');
+                }
+            });
+        }
+
+        /*申请兑现*/
+        $("#subform").hammer({}).bind(eventname,toconfirm);
+        $("#nextbut").hammer({}).bind(eventname,verifypass);
+        $(".next_button").on(eventstart,function(){
+            $(this).addClass("next_button_hover");
+        }).on(eventend,function(){
+            $(this).removeClass("next_button_hover");
+        });
+        $(".back_button").on(eventstart,function(){
+            $(this).addClass("back_button_hover");
+        }).on(eventend,function(){
+            $(this).removeClass("back_button_hover");
+        });
+
+        $("#confirmtsubform").hammer({}).bind(eventname,addchange);
+        $("#cancelconfirmt").hammer({}).bind(eventname,toalipay);
+
+
+        /*选择兑现金币**/
+        function changecoins(x,obj)
+        {
+            var parent_o=$(obj).parent();
+            parent_o.find(".select_ca_se").removeClass("select_ca_se");
+            $(obj).addClass("select_ca_se");
+            parent_o.parent().find(".coins_input").val(x);
+            $("#excoins").text(x+"金币");
+        }
+    </script>
+    <!--兑现兑换成功\提现记录\兑换黄金--->
+    <script type="text/javascript">
+        /*兑现兑换成功提示*/
+        function removecoin(coin,productname,success_nextli,success_endli){
+            goback=toindex;
+            usercoins=usercoins-parseInt(coin);
+            var s_t=$("#success_title");
+            s_t.html("您申请了"+productname+"，已经提交成功");
+            if(!!success_nextli){
+                var n_t=s_t.next();
+                n_t.html(success_nextli);
+                var e_t=n_t.next();
+                if(!!success_endli&&e_t.length>0){
+                    e_t.html(success_endli);
+                }
+            }
+            $(".page").hide();
+            $("#pagedone").show();
+        }
+        $("#retnonebut").hammer({}).bind(eventname,toindex);
+    </script>
+
+
+</body>
+</html>

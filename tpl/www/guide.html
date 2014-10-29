@@ -1,0 +1,38 @@
+<!--{include file='www/header.html' action='guide'}-->
+<link href="<!--{$static}-->/web/style/guide.css" rel="stylesheet" type="text/css" />
+<div class="bcontent">
+    <div class="content">
+    	<div class="cleft">
+        	<h1 class="help">新手指南</h1>
+            <!--{foreach from=$result key=key item=item}-->
+			<a name="<!--{$item.id}-->"></a>
+            <div class="helplist">
+            	<h3><!--{$item.title}--></h3>
+                <p><!--{$item.content}--></p>
+            </div>
+            <!--{/foreach}-->
+        </div>
+        
+        <div class="cright">
+			<!--
+        	<div class="inport">
+            	<input class="search" type="text" />
+                <input class="seabtn" type="submit" value="" />
+            </div>
+			-->
+            <div class="guidelist">
+            	<h2>新手指南</h2>
+            	<ul class="guideul">
+					<!--{foreach from=$result key=key item=item}-->
+                	<li><a href="#<!--{$item.id}-->"><!--{$item.title}--></a></li>
+					<!--{/foreach}-->                	
+                </ul>
+            </div>
+            <div class="guidevideo">
+				<h2><a href="/guide_video">帮助视频</a></h2>
+			</div>
+        </div>
+		<div style="clear:both"></div>
+    </div>
+</div>
+<!--{include file='www/footer.html'}-->

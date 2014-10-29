@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /app/
+Disallow: /comm/
+Disallow: /conf/
+Disallow: /library/
+Disallow: /model/
